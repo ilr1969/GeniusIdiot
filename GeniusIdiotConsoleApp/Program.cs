@@ -38,7 +38,7 @@ namespace GeniusIdiotConsoleApp
                         Console.WriteLine(questions[randNumber]);
 
                         int answer = -1;
-                        try
+                        try //Ловим ошибку ввода не цифры
                         {
                             answer = Convert.ToInt32(Console.ReadLine());
                         }
