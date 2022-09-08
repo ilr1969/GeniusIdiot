@@ -23,7 +23,7 @@ namespace GeniusIdiotConsoleApp
             {
                 int rightAnswers = 0;
                 int i = 1;
-
+                //Ntcn
                 Random random = new Random();
                 List<int> randRange = new List<int>();
 
