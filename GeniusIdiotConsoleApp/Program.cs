@@ -23,7 +23,7 @@ namespace GeniusIdiotConsoleApp
             {
                 int rightAnswers = 0;
                 int i = 1;
-                //Ntcn
+                
                 Random random = new Random();
                 List<int> randRange = new List<int>();
 
@@ -60,7 +60,7 @@ namespace GeniusIdiotConsoleApp
                     { 0, "Идиот"}, { 1, "Кретин"},{ 2, "Дурак"},{ 3, "Нормальный"},{ 4, "Талант"},{ 5, "Гений"}
                 };
 
-                Console.WriteLine($"{name}, ты - {result[rightAnswers]}!");
+                Console.WriteLine($"{name}, ты - {result[rightAnswers*5/countQuestions]}!");
 
                 Thread.Sleep(1000);
 
@@ -69,24 +69,6 @@ namespace GeniusIdiotConsoleApp
                 {
                     break;
                 }
-            }
-        }
-
-        public static bool GetUserChoice()
-        {
-            while (true)
-            {
-                Console.WriteLine("Желаете повторить тест?");
-                string userChoice = Console.ReadLine();
-                if (userChoice.ToLower() == "нет")
-                {
-                    return false;
-                }
-                if (userChoice.ToLower() == "да")
-                {
-                    return true;
-                }
-
             }
         }
 
@@ -110,6 +92,23 @@ namespace GeniusIdiotConsoleApp
             questions[3] = "Укол делают каждые полчаса. Сколько нужно минут для трёх уколов?";
             questions[4] = "Пять свечей горело. Две потухли. Сколько осталось свечей?";
             return questions;
+        }
+
+        public static bool GetUserChoice()
+        {
+            while (true)
+            {
+                Console.WriteLine("Желаете повторить тест? Введите Да или Нет");
+                string userChoice = Console.ReadLine();
+                if (userChoice.ToLower() == "нет")
+                {
+                    return false;
+                }
+                if (userChoice.ToLower() == "да")
+                {
+                    return true;
+                }
+            }
         }
     }
 }
