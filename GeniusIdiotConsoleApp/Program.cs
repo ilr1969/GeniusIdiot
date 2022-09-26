@@ -157,42 +157,5 @@ namespace GeniusIdiotConsoleApp
                 }
             }
         }
-
-/*        public static Excel.Workbooks CreateExcel(string path) //Проверяем, существует ли файл. Если нет - создаём в папку "Документы" текущего пользователя.
-        {
-            Excel.Application excel = new Excel.Application();
-            var sheet = excel.Workbooks;
-            if (!File.Exists($"{path}/Result.xlsx"))
-            {
-                sheet.Add().SaveAs($"{path}/Result.xlsx");
-                var title = sheet.Open($"{path}/Result.xlsx").Worksheets.Item[1];
-                title.Cells[1, 1] = "Name";
-                title.Cells[1, 2] = "Result";
-                sheet.Add().Close();
-            }
-            excel.Quit();
-            Marshal.ReleaseComObject(excel);
-            Marshal.ReleaseComObject(sheet);
-            return sheet;
-        }*/
-
-/*        private static void RecordToExcel(int countQuestions, string name, int rightAnswers, Dictionary<int, string> result, string path) //Записываем результаты теста в следующую свободную ячейку.
-        {
-            Excel.Application excel = null;
-            Excel.Worksheet record = null;
-            try
-            {
-                excel = new Excel.Application();
-                record = sheet.Open($"{path}/Result.xlsx").Worksheets.Item[1];
-                record.Cells[1, 1] = name;
-                record.Cells[1, 2] = result[rightAnswers * 5 / countQuestions];
-                excel.Quit();
-            }
-            finally
-            {
-                Marshal.ReleaseComObject(excel);
-                Marshal.ReleaseComObject(record);
-            }
-        }*/
     }
 }
