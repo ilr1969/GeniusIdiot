@@ -22,7 +22,7 @@ namespace GeniusIdiotConsoleApp
             string file = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/result.txt";
             using (FileStream fs = new FileStream(file, FileMode.OpenOrCreate))
             {
-                byte[] buffer = Encoding.Default.GetBytes($"ФИО       Результат Диагноз   " + "\n");
+                byte[] buffer = Encoding.Default.GetBytes($"ФИО;Результат;Диагноз");
                 fs.Write(buffer, 0, buffer.Length);
             }
             
@@ -46,8 +46,11 @@ namespace GeniusIdiotConsoleApp
                     {
                         byte[] buffer = new byte[fs.Length];
                         fs.Read(buffer, 0, buffer.Length);
-                        string res = Encoding.Default.GetString(buffer);
-                        Console.WriteLine(res);
+                        foreach (string i in Encoding.Default.GetString(buffer).Split('\n'))
+                        {
+                            var t = i.Split(';');
+                            Console.WriteLine($"{t[0],-10}{t[1],-10}{t[2],-10}");
+                        }
                     }
                 }
                 if (choice == 1)
@@ -70,17 +73,13 @@ namespace GeniusIdiotConsoleApp
                                 Console.WriteLine($"Вопрос № {i}");
                                 Console.WriteLine(questions[randNumber]);
 
-                                int answer = -1;
-                                GetUserAnswer();
-
-                                if (answer == answers[randNumber])
+                                if (GetUserAnswer() == answers[randNumber])
                                 {
                                     rightAnswers++;
                                 }
                                 i++;
                             }
                         }
-
 
                         Dictionary<int, string> result = new Dictionary<int, string>()
                         {
@@ -91,11 +90,9 @@ namespace GeniusIdiotConsoleApp
 
                         using (FileStream fs = new FileStream(file,FileMode.Append))
                         {
-                            byte[] buffer = Encoding.Default.GetBytes($"{name, -10}{rightAnswers, -10}{result[rightAnswers * 5 / countQuestions], -10}" + "\n");
+                            byte[] buffer = Encoding.Default.GetBytes("\n" + $"{name};{rightAnswers};{result[rightAnswers * 5 / countQuestions]}");
                             fs.Write(buffer, 0, buffer.Length);
                         }
-
-                            Thread.Sleep(1000);
 
                         bool userChoice = GetUserChoice();
                         if (userChoice == false)
