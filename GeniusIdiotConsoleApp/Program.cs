@@ -68,23 +68,16 @@ namespace GeniusIdiotConsoleApp
                             {
                                 randRange.Add(randNumber);
                                 Console.WriteLine($"Вопрос № {i}");
-                                i++;
                                 Console.WriteLine(questions[randNumber]);
 
                                 int answer = -1;
-                                try
-                                {
-                                    answer = Convert.ToInt32(Console.ReadLine());
-                                }
-                                catch
-                                {
-                                    Console.WriteLine("Введите только число!");
-                                }
+                                GetUserAnswer();
 
                                 if (answer == answers[randNumber])
                                 {
                                     rightAnswers++;
                                 }
+                                i++;
                             }
                         }
 
@@ -115,6 +108,21 @@ namespace GeniusIdiotConsoleApp
                 {
 
                     break;
+                }
+            }
+        }
+
+        private static int GetUserAnswer()
+        {
+            while (true)
+            {
+                try
+                {
+                    return Convert.ToInt32(Console.ReadLine());
+                }
+                catch
+                {
+                    Console.WriteLine("Введите корректное число!");
                 }
             }
         }
