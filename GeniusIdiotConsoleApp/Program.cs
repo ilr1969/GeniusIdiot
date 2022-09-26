@@ -1,72 +1,119 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Packaging;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace GeniusIdiotConsoleApp
 {
     class Program
     {
-        public 
+        public
         static void Main(string[] args)
         {
             int countQuestions = 5;
             string[] questions = GetQuestions(countQuestions);
             int[] answers = GetAnswers(countQuestions);
-
+            string file = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/result.txt";
+            using (FileStream fs = new FileStream(file, FileMode.OpenOrCreate))
+            {
+                byte[] buffer = Encoding.Default.GetBytes($"ФИО       Результат Диагноз   " + "\n");
+                fs.Write(buffer, 0, buffer.Length);
+            }
+            
             Console.WriteLine("Назови себя:");
             string name = Console.ReadLine();
- 
+
             while (true)
             {
-                int rightAnswers = 0;
-                int i = 1;
-                
-                Random random = new Random();
-                List<int> randRange = new List<int>();
 
-                while (randRange.Count < countQuestions)
+                Console.WriteLine("Что вы хотите сделать?");
+                Console.WriteLine("1. Пройти тест.");
+                Console.WriteLine("2. Показать результаты.");
+                Console.WriteLine("3. Выйти.");
+
+
+                int choice = Convert.ToInt32(Console.ReadLine());
+
+                if (choice == 2)
                 {
-                    int randNumber = random.Next(0, countQuestions);
-                    if (!randRange.Contains(randNumber))
+                    using (FileStream fs = new FileStream(file, FileMode.Open))
                     {
-                        randRange.Add(randNumber);
-                        Console.WriteLine($"Вопрос № {i}");
-                        i++;
-                        Console.WriteLine(questions[randNumber]);
+                        byte[] buffer = new byte[fs.Length];
+                        fs.Read(buffer, 0, buffer.Length);
+                        string res = Encoding.Default.GetString(buffer);
+                        Console.WriteLine(res);
+                    }
+                }
+                if (choice == 1)
+                {
 
-                        int answer = -1;
-                        try
+                    while (true)
+                    {
+                        int rightAnswers = 0;
+                        int i = 1;
+
+                        Random random = new Random();
+                        List<int> randRange = new List<int>();
+
+                        while (randRange.Count < countQuestions)
                         {
-                            answer = Convert.ToInt32(Console.ReadLine());
-                        }
-                        catch
-                        {
-                            Console.WriteLine("Введите только число!");
+                            int randNumber = random.Next(0, countQuestions);
+                            if (!randRange.Contains(randNumber))
+                            {
+                                randRange.Add(randNumber);
+                                Console.WriteLine($"Вопрос № {i}");
+                                i++;
+                                Console.WriteLine(questions[randNumber]);
+
+                                int answer = -1;
+                                try
+                                {
+                                    answer = Convert.ToInt32(Console.ReadLine());
+                                }
+                                catch
+                                {
+                                    Console.WriteLine("Введите только число!");
+                                }
+
+                                if (answer == answers[randNumber])
+                                {
+                                    rightAnswers++;
+                                }
+                            }
                         }
 
-                        if (answer == answers[randNumber])
+
+                        Dictionary<int, string> result = new Dictionary<int, string>()
                         {
-                            rightAnswers++;
+                            { 0, "Идиот"}, { 1, "Кретин"},{ 2, "Дурак"},{ 3, "Нормальный"},{ 4, "Талант"},{ 5, "Гений"}
+                        };
+
+                        Console.WriteLine($"{name}, ты - {result[rightAnswers * 5 / countQuestions]}!");
+
+                        using (FileStream fs = new FileStream(file,FileMode.Append))
+                        {
+                            byte[] buffer = Encoding.Default.GetBytes($"{name, -10}{rightAnswers, -10}{result[rightAnswers * 5 / countQuestions], -10}" + "\n");
+                            fs.Write(buffer, 0, buffer.Length);
+                        }
+
+                            Thread.Sleep(1000);
+
+                        bool userChoice = GetUserChoice();
+                        if (userChoice == false)
+                        {
+                            break;
                         }
                     }
                 }
-
-
-                Dictionary<int, string> result = new Dictionary<int, string>()
+                if (choice == 3)
                 {
-                    { 0, "Идиот"}, { 1, "Кретин"},{ 2, "Дурак"},{ 3, "Нормальный"},{ 4, "Талант"},{ 5, "Гений"}
-                };
 
-                Console.WriteLine($"{name}, ты - {result[rightAnswers*5/countQuestions]}!");
-
-                Thread.Sleep(1000);
-
-                bool userChoice = GetUserChoice();
-                if (userChoice == false)
-                {
                     break;
                 }
             }
@@ -110,5 +157,42 @@ namespace GeniusIdiotConsoleApp
                 }
             }
         }
+
+/*        public static Excel.Workbooks CreateExcel(string path) //Проверяем, существует ли файл. Если нет - создаём в папку "Документы" текущего пользователя.
+        {
+            Excel.Application excel = new Excel.Application();
+            var sheet = excel.Workbooks;
+            if (!File.Exists($"{path}/Result.xlsx"))
+            {
+                sheet.Add().SaveAs($"{path}/Result.xlsx");
+                var title = sheet.Open($"{path}/Result.xlsx").Worksheets.Item[1];
+                title.Cells[1, 1] = "Name";
+                title.Cells[1, 2] = "Result";
+                sheet.Add().Close();
+            }
+            excel.Quit();
+            Marshal.ReleaseComObject(excel);
+            Marshal.ReleaseComObject(sheet);
+            return sheet;
+        }*/
+
+/*        private static void RecordToExcel(int countQuestions, string name, int rightAnswers, Dictionary<int, string> result, string path) //Записываем результаты теста в следующую свободную ячейку.
+        {
+            Excel.Application excel = null;
+            Excel.Worksheet record = null;
+            try
+            {
+                excel = new Excel.Application();
+                record = sheet.Open($"{path}/Result.xlsx").Worksheets.Item[1];
+                record.Cells[1, 1] = name;
+                record.Cells[1, 2] = result[rightAnswers * 5 / countQuestions];
+                excel.Quit();
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(excel);
+                Marshal.ReleaseComObject(record);
+            }
+        }*/
     }
 }
