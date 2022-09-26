@@ -17,8 +17,8 @@ namespace GeniusIdiotConsoleApp
         static void Main(string[] args)
         {
             int countQuestions = 5;
-            string[] questions = GetQuestions(countQuestions);
-            int[] answers = GetAnswers(countQuestions);
+            var questions = GetQuestions();
+            var answers = GetAnswers();
             string file = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/result.txt";
             using (FileStream fs = new FileStream(file, FileMode.OpenOrCreate))
             {
@@ -59,27 +59,22 @@ namespace GeniusIdiotConsoleApp
                     while (true)
                     {
                         int rightAnswers = 0;
-                        int i = 1;
-
-                        Random random = new Random();
-                        List<int> randRange = new List<int>();
-
-                        while (randRange.Count < countQuestions)
+                        for (var i=1; i<=countQuestions; i++)
                         {
-                            int randNumber = random.Next(0, countQuestions);
-                            if (!randRange.Contains(randNumber))
-                            {
-                                randRange.Add(randNumber);
-                                Console.WriteLine($"Вопрос № {i}");
-                                Console.WriteLine(questions[randNumber]);
+                            Random random = new Random();
+                            int randNumber = random.Next(0, questions.Count);
 
-                                if (GetUserAnswer() == answers[randNumber])
-                                {
-                                    rightAnswers++;
-                                }
-                                i++;
+                            Console.WriteLine($"Вопрос № {i}");
+                            Console.WriteLine(questions[randNumber]);
+
+                            if (GetUserAnswer() == answers[randNumber])
+                            {
+                                rightAnswers++;
+                                questions.RemoveAt(randNumber);
+                                answers.RemoveAt(randNumber);
                             }
                         }
+
 
                         Dictionary<int, string> result = new Dictionary<int, string>()
                         {
@@ -124,25 +119,25 @@ namespace GeniusIdiotConsoleApp
             }
         }
 
-        private static int[] GetAnswers(int countQuestions)
+        private static List<int> GetAnswers()
         {
-            int[] answers = new int[countQuestions];
-            answers[0] = 6;
-            answers[1] = 9;
-            answers[2] = 25;
-            answers[3] = 60;
-            answers[4] = 2;
+            List<int> answers = new List<int>();
+            answers.Add(6);
+            answers.Add(9);
+            answers.Add(25);
+            answers.Add(60);
+            answers.Add(2);
             return answers;
         }
 
-        private static string[] GetQuestions(int countQuestions)
+        private static List<string> GetQuestions()
         {
-            string[] questions = new string[countQuestions];
-            questions[0] = "Сколько будет два плюс два умноженное на два?";
-            questions[1] = "Бревно нужно распилить на 10 частей, сколько нужно сделать распилов?";
-            questions[2] = "На двух руках 10 пальцев. Сколько пальцев на пяти руках?";
-            questions[3] = "Укол делают каждые полчаса. Сколько нужно минут для трёх уколов?";
-            questions[4] = "Пять свечей горело. Две потухли. Сколько осталось свечей?";
+            List<string> questions = new List<string>();
+            questions.Add("Сколько будет два плюс два умноженное на два?");
+            questions.Add("Бревно нужно распилить на 10 частей, сколько нужно сделать распилов?");
+            questions.Add("На двух руках 10 пальцев. Сколько пальцев на пяти руках?");
+            questions.Add("Укол делают каждые полчаса. Сколько нужно минут для трёх уколов?");
+            questions.Add("Пять свечей горело. Две потухли. Сколько осталось свечей?");
             return questions;
         }
 
