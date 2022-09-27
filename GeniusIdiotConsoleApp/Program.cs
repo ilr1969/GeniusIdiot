@@ -1,33 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Packaging;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Excel = Microsoft.Office.Interop.Excel;
 
 namespace GeniusIdiotConsoleApp
 {
-    class Program
+    partial class Program
     {
-        public
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
+            var userStorage = new List<User>();
             int countQuestions = 5;
-            var questions = GetQuestions();
-            var answers = GetAnswers();
+            var questions = QuestionsStorage.GetAll();
             string file = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/result.txt";
-            using (FileStream fs = new FileStream(file, FileMode.OpenOrCreate))
-            {
-                byte[] buffer = Encoding.Default.GetBytes($"ФИО;Результат;Диагноз");
-                fs.Write(buffer, 0, buffer.Length);
-            }
-            
+
             Console.WriteLine("Назови себя:");
             string name = Console.ReadLine();
+            var user = new User(name, 0, "Неизвестен");
 
             while (true)
             {
@@ -42,52 +31,38 @@ namespace GeniusIdiotConsoleApp
 
                 if (choice == 2)
                 {
-                    using (FileStream fs = new FileStream(file, FileMode.Open))
-                    {
-                        byte[] buffer = new byte[fs.Length];
-                        fs.Read(buffer, 0, buffer.Length);
-                        foreach (string i in Encoding.Default.GetString(buffer).Split('\n'))
-                        {
-                            var t = i.Split(';');
-                            Console.WriteLine($"{t[0],-10}{t[1],-10}{t[2],-10}");
-                        }
-                    }
+                    PrintUsersResults();
                 }
+
                 if (choice == 1)
                 {
-
                     while (true)
                     {
-                        int rightAnswers = 0;
-                        for (var i=1; i<=countQuestions; i++)
+                        for (var i = 1; i <= countQuestions; i++)
                         {
                             Random random = new Random();
                             int randNumber = random.Next(0, questions.Count);
 
                             Console.WriteLine($"Вопрос № {i}");
-                            Console.WriteLine(questions[randNumber]);
+                            Console.WriteLine(questions[randNumber].question);
 
-                            if (GetUserAnswer() == answers[randNumber])
+                            if (GetUserAnswer() == questions[randNumber].answer)
                             {
-                                rightAnswers++;
+                                user.AcceptRightAnswer();
                                 questions.RemoveAt(randNumber);
-                                answers.RemoveAt(randNumber);
                             }
                         }
-
 
                         Dictionary<int, string> result = new Dictionary<int, string>()
                         {
                             { 0, "Идиот"}, { 1, "Кретин"},{ 2, "Дурак"},{ 3, "Нормальный"},{ 4, "Талант"},{ 5, "Гений"}
                         };
 
-                        Console.WriteLine($"{name}, ты - {result[rightAnswers * 5 / countQuestions]}!");
+                        Console.WriteLine($"{name}, ты - {result[user.score * 5 / countQuestions]}!");
+                        user.diagnose = result[user.score * 5 / countQuestions];
+                        userStorage.Add(new User(user.name, user.score, user.diagnose));
 
-                        using (FileStream fs = new FileStream(file,FileMode.Append))
-                        {
-                            byte[] buffer = Encoding.Default.GetBytes("\n" + $"{name};{rightAnswers};{result[rightAnswers * 5 / countQuestions]}");
-                            fs.Write(buffer, 0, buffer.Length);
-                        }
+                        UserStorage.SaveUserResults(user);
 
                         bool userChoice = GetUserChoice();
                         if (userChoice == false)
@@ -98,8 +73,19 @@ namespace GeniusIdiotConsoleApp
                 }
                 if (choice == 3)
                 {
-
                     break;
+                }
+            }
+        }
+
+        private static void PrintUsersResults()
+        {
+            Console.WriteLine("{0,-10}{1,-10}{2,-10}", "Имя", "Баллы" , "Результат");
+            var result = UserStorage.GetUsersResults();
+            {
+                foreach (var user in result)
+                {
+                    Console.WriteLine($"{user.name, -10}{user.score, -10}{user.diagnose, -10}");
                 }
             }
         }
@@ -117,28 +103,6 @@ namespace GeniusIdiotConsoleApp
                     Console.WriteLine("Введите корректное число!");
                 }
             }
-        }
-
-        private static List<int> GetAnswers()
-        {
-            List<int> answers = new List<int>();
-            answers.Add(6);
-            answers.Add(9);
-            answers.Add(25);
-            answers.Add(60);
-            answers.Add(2);
-            return answers;
-        }
-
-        private static List<string> GetQuestions()
-        {
-            List<string> questions = new List<string>();
-            questions.Add("Сколько будет два плюс два умноженное на два?");
-            questions.Add("Бревно нужно распилить на 10 частей, сколько нужно сделать распилов?");
-            questions.Add("На двух руках 10 пальцев. Сколько пальцев на пяти руках?");
-            questions.Add("Укол делают каждые полчаса. Сколько нужно минут для трёх уколов?");
-            questions.Add("Пять свечей горело. Две потухли. Сколько осталось свечей?");
-            return questions;
         }
 
         public static bool GetUserChoice()
