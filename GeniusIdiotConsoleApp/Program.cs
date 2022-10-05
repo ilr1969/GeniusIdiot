@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace GeniusIdiotConsoleApp
 {
@@ -11,8 +9,8 @@ namespace GeniusIdiotConsoleApp
         {
             var userStorage = new List<User>();
             int countQuestions = 5;
-            var questions = QuestionsStorage.GetAll();
-            string file = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/result.txt";
+            var questions = QuestionsStorage.questions;
+            QuestionsStorage.GetAll();
 
             Console.WriteLine("Назови себя:");
             string name = Console.ReadLine();
@@ -29,7 +27,7 @@ namespace GeniusIdiotConsoleApp
                 Console.WriteLine("0. Выйти.");
 
 
-                int choice = Convert.ToInt32(Console.ReadLine());
+                int choice = GetUserAnswer();
 
                 if (choice == 1)
                 {
@@ -46,8 +44,8 @@ namespace GeniusIdiotConsoleApp
                             if (GetUserAnswer() == questions[randNumber].answer)
                             {
                                 user.AcceptRightAnswer();
-                                questions.RemoveAt(randNumber);
                             }
+                            questions.RemoveAt(randNumber);
                         }
 
                         Dictionary<int, string> result = new Dictionary<int, string>()
@@ -79,16 +77,18 @@ namespace GeniusIdiotConsoleApp
                     Console.WriteLine("Введите вопрос:");
                     var question = Console.ReadLine();
                     Console.WriteLine("Введите ответ:");
-                    var answer = Convert.ToInt32(Console.ReadLine());
+                    var answer = GetUserAnswer();
                     QuestionsStorage.AddQuestion(question, answer);
+                    QuestionsStorage.SaveData(new Questions(question, answer));
                 }
 
                 if (choice == 4)
                 {
                     Console.WriteLine("Выберите номер вопроса для удаления:");
                     QuestionsStorage.GetQuestions();
-                    var numToDel  = Convert.ToInt32(Console.ReadLine());
+                    var numToDel  = GetUserAnswer();
                     QuestionsStorage.questions.RemoveAt(numToDel-1);
+                    QuestionsStorage.RemoveData();
                 }
 
                 if (choice == 0)

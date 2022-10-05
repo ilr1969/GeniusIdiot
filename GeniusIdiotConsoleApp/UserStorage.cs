@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace GeniusIdiotConsoleApp
 {
     public class UserStorage
     {
         public static string file = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/result.txt";
+        
         public static void SaveUserResults(User user)
         {
-            FileSystem.AppendToFile(file, user);
+            string text = $"{user.name};{user.score};{ user.diagnose}#";
+            FileSystem.AppendToFile(file, text);
         }
 
         public static List<User> GetUsersResults()
