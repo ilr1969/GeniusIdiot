@@ -24,15 +24,12 @@ namespace GeniusIdiotConsoleApp
                 Console.WriteLine("Что вы хотите сделать?");
                 Console.WriteLine("1. Пройти тест.");
                 Console.WriteLine("2. Показать результаты.");
-                Console.WriteLine("3. Выйти.");
+                Console.WriteLine("3. Добавить вопрос.");
+                Console.WriteLine("4. Удалить вопрос.");
+                Console.WriteLine("0. Выйти.");
 
 
                 int choice = Convert.ToInt32(Console.ReadLine());
-
-                if (choice == 2)
-                {
-                    PrintUsersResults();
-                }
 
                 if (choice == 1)
                 {
@@ -71,7 +68,30 @@ namespace GeniusIdiotConsoleApp
                         }
                     }
                 }
+
+                if (choice == 2)
+                {
+                    PrintUsersResults();
+                }
+
                 if (choice == 3)
+                {
+                    Console.WriteLine("Введите вопрос:");
+                    var question = Console.ReadLine();
+                    Console.WriteLine("Введите ответ:");
+                    var answer = Convert.ToInt32(Console.ReadLine());
+                    QuestionsStorage.AddQuestion(question, answer);
+                }
+
+                if (choice == 4)
+                {
+                    Console.WriteLine("Выберите номер вопроса для удаления:");
+                    QuestionsStorage.GetQuestions();
+                    var numToDel  = Convert.ToInt32(Console.ReadLine());
+                    QuestionsStorage.questions.RemoveAt(numToDel-1);
+                }
+
+                if (choice == 0)
                 {
                     break;
                 }
