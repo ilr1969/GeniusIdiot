@@ -46,7 +46,7 @@ namespace GeniusIdiotConsoleApp
 
         public static void EraseData(string file)
         {
-            File.WriteAllText(file, "");
+            File.Delete(file);
         }
 
         public static bool Exists(string file)
