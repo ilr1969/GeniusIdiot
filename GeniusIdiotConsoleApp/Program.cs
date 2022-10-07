@@ -58,6 +58,8 @@ namespace GeniusIdiotConsoleApp
                         userStorage.Add(new User(user.name, user.score, user.diagnose));
 
                         UserStorage.SaveUserResults(user);
+                        QuestionsStorage.RemoveData();
+                        QuestionsStorage.GetAll();
 
                         bool userChoice = GetUserChoice();
                         if (userChoice == false)
