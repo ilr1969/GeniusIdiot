@@ -9,14 +9,11 @@ namespace WindowsFormsApp
     {
         private static List<Questions> questions;
         private static Questions currentQuestion;
+        Results results = new Results();
         Auth auth = new Auth();
         private User user;
         int countQuestions = 5;
         private int questionNum = 1;
-        Dictionary<int, string> result = new Dictionary<int, string>()
-        {
-            { 0, "Идиот"}, { 1, "Кретин"},{ 2, "Дурак"},{ 3, "Нормальный"},{ 4, "Талант"},{ 5, "Гений"}
-        };
 
         public MainForm()
         {
@@ -48,8 +45,7 @@ namespace WindowsFormsApp
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var answ = Convert.ToInt32(answer.Text);
-            if (answ == currentQuestion.answer)
+            if (Convert.ToInt32(Console.ReadLine()) == currentQuestion.answer)
             {
                 user.AcceptRightAnswer();
             }
@@ -58,8 +54,9 @@ namespace WindowsFormsApp
             questions.Remove(currentQuestion);
             if (questions.Count == 0)
             {
-                user = new User(auth.name, user.score, result[user.score * 5 / countQuestions]);
-                MessageBox.Show($"{auth.name}, ты - {result[user.score * 5 / countQuestions]}!");
+                var diagnose = Results.GetResults(user, countQuestions);
+                user = new User(auth.name, user.score, diagnose);
+                MessageBox.Show($"{auth.name}, ты - {diagnose}!");
                 UserStorage.SaveUserResults(user);
                 QuestionsStorage.RemoveData();
                 QuestionsStorage.GetAll();
