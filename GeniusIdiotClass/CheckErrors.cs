@@ -1,37 +1,24 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace GeniusIdiotClass
 {
     public class CheckErrors
     {
-        public static int GetUserAnswer()
+        public static bool GetUserAnswer(string input, out int choice, out string exMessage)
         {
-            while (true)
+            try
             {
-                try
-                {
-                    return Convert.ToInt32(Console.ReadLine());
-                }
-                catch
-                {
-                    Console.WriteLine("Введите корректное число!");
-                }
-            }
-        }
+                choice = Convert.ToInt32(input);
+                exMessage = "";
+                return true;
 
-        public static bool GetUserChoice()
-        {
-            while (true)
+            }
+            catch
             {
-                string userChoice = Console.ReadLine();
-                if (userChoice.ToLower() == "нет")
-                {
-                    return false;
-                }
-                if (userChoice.ToLower() == "да")
-                {
-                    return true;
-                }
+                choice = 0;
+                exMessage = "Введите корректное число!";
+                return false;
             }
         }
     }

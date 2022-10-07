@@ -45,9 +45,15 @@ namespace WindowsFormsApp
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (Convert.ToInt32(Console.ReadLine()) == currentQuestion.answer)
+            if (CheckErrors.GetUserAnswer(answer.Text, out int num, out string exMesage))
             {
                 user.AcceptRightAnswer();
+            }
+            else
+            {
+                answer.Text = "";
+                MessageBox.Show(exMesage);
+                return;
             }
             answer.Text = "";
             this.ActiveControl = answer;
