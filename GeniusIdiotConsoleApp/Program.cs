@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GeniusIdiotConsoleApp
+namespace GeniusIdiotClass
 {
     partial class Program
     {
