@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using GeniusIdiotClass;
 
-namespace GeniusIdiotClass
+namespace GeniusIdiotConsoleApp
 {
     partial class Program
     {
@@ -27,7 +28,7 @@ namespace GeniusIdiotClass
                 Console.WriteLine("0. Выйти.");
 
 
-                int choice = GetUserAnswer();
+                int choice = CheckErrors.GetUserAnswer();
 
                 if (choice == 1)
                 {
@@ -41,27 +42,23 @@ namespace GeniusIdiotClass
                             Console.WriteLine($"Вопрос № {i}");
                             Console.WriteLine(questions[randNumber].question);
 
-                            if (GetUserAnswer() == questions[randNumber].answer)
+                            if (CheckErrors.GetUserAnswer() == questions[randNumber].answer)
                             {
                                 user.AcceptRightAnswer();
                             }
                             questions.RemoveAt(randNumber);
                         }
 
-                        Dictionary<int, string> result = new Dictionary<int, string>()
-                        {
-                            { 0, "Идиот"}, { 1, "Кретин"},{ 2, "Дурак"},{ 3, "Нормальный"},{ 4, "Талант"},{ 5, "Гений"}
-                        };
-
-                        Console.WriteLine($"{name}, ты - {result[user.score * 5 / countQuestions]}!");
-                        user.diagnose = result[user.score * 5 / countQuestions];
+                        user.diagnose = Results.GetResults(user, countQuestions);
+                        Console.WriteLine($"{name}, ты - {user.diagnose}!");
                         userStorage.Add(new User(user.name, user.score, user.diagnose));
 
                         UserStorage.SaveUserResults(user);
                         QuestionsStorage.RemoveData();
                         QuestionsStorage.GetAll();
 
-                        bool userChoice = GetUserChoice();
+                        Console.WriteLine("Желаете повторить тест? Введите Да или Нет");
+                        bool userChoice = CheckErrors.GetUserChoice();
                         if (userChoice == false)
                         {
                             break;
@@ -79,7 +76,7 @@ namespace GeniusIdiotClass
                     Console.WriteLine("Введите вопрос:");
                     var question = Console.ReadLine();
                     Console.WriteLine("Введите ответ:");
-                    var answer = GetUserAnswer();
+                    var answer = CheckErrors.GetUserAnswer();
                     QuestionsStorage.AddQuestion(question, answer);
                     QuestionsStorage.SaveData(new Questions(question, answer));
                 }
@@ -88,7 +85,7 @@ namespace GeniusIdiotClass
                 {
                     Console.WriteLine("Выберите номер вопроса для удаления:");
                     QuestionsStorage.GetQuestions();
-                    var numToDel  = GetUserAnswer();
+                    var numToDel  = CheckErrors.GetUserAnswer();
                     QuestionsStorage.questions.RemoveAt(numToDel-1);
                     QuestionsStorage.RemoveData();
                 }
@@ -100,6 +97,8 @@ namespace GeniusIdiotClass
             }
         }
 
+
+
         private static void PrintUsersResults()
         {
             Console.WriteLine("{0,-10}{1,-10}{2,-10}", "Имя", "Баллы" , "Результат");
@@ -108,38 +107,6 @@ namespace GeniusIdiotClass
                 foreach (var user in result)
                 {
                     Console.WriteLine($"{user.name, -10}{user.score, -10}{user.diagnose, -10}");
-                }
-            }
-        }
-
-        private static int GetUserAnswer()
-        {
-            while (true)
-            {
-                try
-                {
-                    return Convert.ToInt32(Console.ReadLine());
-                }
-                catch
-                {
-                    Console.WriteLine("Введите корректное число!");
-                }
-            }
-        }
-
-        public static bool GetUserChoice()
-        {
-            while (true)
-            {
-                Console.WriteLine("Желаете повторить тест? Введите Да или Нет");
-                string userChoice = Console.ReadLine();
-                if (userChoice.ToLower() == "нет")
-                {
-                    return false;
-                }
-                if (userChoice.ToLower() == "да")
-                {
-                    return true;
                 }
             }
         }
