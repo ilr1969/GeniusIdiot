@@ -25,9 +25,14 @@ namespace WindowsFormsApp
 
         private void ShowResults_Load(object sender, EventArgs e)
         {
+            int num = 0;
             foreach (var i in UserStorage.GetUsersResults())
             {
-                showResultsRichTextBox.Text += $"{i.name, -10}{i.score, -10}{i.diagnose, -10}" + "\n";
+                showResultsDataGridView.Rows.Add();
+                showResultsDataGridView.Rows[num].Cells[0].Value = i.name;
+                showResultsDataGridView.Rows[num].Cells[1].Value = i.score;
+                showResultsDataGridView.Rows[num].Cells[2].Value = i.diagnose;
+                num++;
             }
         }
     }

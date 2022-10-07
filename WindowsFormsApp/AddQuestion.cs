@@ -23,7 +23,15 @@ namespace WindowsFormsApp
         private void addButton_Click(object sender, EventArgs e)
         {
             question = questionTextBox.Text;
-            answer = Convert.ToInt32(answerTextBox.Text);
+            if (CheckErrors.GetUserAnswer(answerTextBox.Text, out int choice, out string exMessage))
+            {
+                answer = choice;
+            }
+            else
+            {
+                MessageBox.Show(exMessage);
+                return;
+            }
             QuestionsStorage.AddQuestion(question, answer);
             QuestionsStorage.SaveData(new Questions(question, answer));
             this.Close();

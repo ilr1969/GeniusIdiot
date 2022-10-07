@@ -83,6 +83,7 @@ namespace WindowsFormsApp
             this.Controls.Add(this.questionsRichTextBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "DeleteQuestion";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Удаление вопроса";
             this.Load += new System.EventHandler(this.DeleteQuestion_Load);
             this.ResumeLayout(false);

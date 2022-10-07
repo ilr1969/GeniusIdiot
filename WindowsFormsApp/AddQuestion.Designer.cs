@@ -90,6 +90,7 @@ namespace WindowsFormsApp
             this.Controls.Add(this.questionLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "addQuestion";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Добавление вопроса";
             this.ResumeLayout(false);
             this.PerformLayout();
