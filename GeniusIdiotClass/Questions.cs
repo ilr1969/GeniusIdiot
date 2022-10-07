@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GeniusIdiotConsoleApp
+namespace GeniusIdiotClass
 {
     public class Questions
     {

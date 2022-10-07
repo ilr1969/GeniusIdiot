@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace GeniusIdiotConsoleApp
+namespace GeniusIdiotClass
 {
     public class FileSystem
     {
