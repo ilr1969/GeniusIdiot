@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace GeniusIdiotClass
 {
@@ -16,32 +16,36 @@ namespace GeniusIdiotClass
             }
         }
 
-        public static void ReadResults(List<User> userList, string file)
+        public static List<User> ReadResults(string file)
         {
-            using (FileStream fs = new FileStream(file, FileMode.OpenOrCreate))
+            string users;
+            if (FileSystem.Exists(file))
             {
-                byte[] buffer = new byte[fs.Length];
-                fs.Read(buffer, 0, buffer.Length);
-                foreach (string i in Encoding.Default.GetString(buffer).Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries))
+                using (FileStream fs = new FileStream(file, FileMode.Open))
                 {
-                    var t = i.Split(';');
-                    userList.Add(new User(t[0], Convert.ToInt32(t[1]), t[2]));
+                    byte[] buffer = new byte[fs.Length];
+                    fs.Read(buffer, 0, buffer.Length);
+                    users = Encoding.Default.GetString(buffer);
+                    return JsonConvert.DeserializeObject<List<User>>(users);
                 }
             }
+            else
+            {
+                return new List<User>();
+            }
+            
         }
 
-        public static void ReadData(List<Questions> questions, string file)
+        public static List<Questions> ReadData(string file)
         {
-            using (FileStream fs = new FileStream(file, FileMode.OpenOrCreate))
+            string questions;
+            using (FileStream fs = new FileStream(file, FileMode.Open))
             {
                 byte[] buffer = new byte[fs.Length];
                 fs.Read(buffer, 0, buffer.Length);
-                foreach (string i in Encoding.Default.GetString(buffer).Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    var t = i.Split(';');
-                    questions.Add(new Questions(t[0], Convert.ToInt32(t[1])));
-                }
+                questions = Encoding.Default.GetString(buffer);
             }
+            return JsonConvert.DeserializeObject<List<Questions>>(questions);
         }
 
         public static void EraseData(string file)

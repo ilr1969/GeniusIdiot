@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace GeniusIdiotClass
 {
     public class QuestionsStorage
     {
         public static List<Questions> questions = new List<Questions>();
-        public static string file = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/data.txt";
+        public static string file = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/data.json";
 
-        public static void GetAll()
+        public static List<Questions> GetAll()
         {
             if (FileSystem.Exists(file))
             {
-                FileSystem.ReadData(questions, file);
+                return FileSystem.ReadData(file);
             }
             else
             {
@@ -21,25 +22,20 @@ namespace GeniusIdiotClass
                 questions.Add(new Questions("На двух руках 10 пальцев. Сколько пальцев на пяти руках?", 25));
                 questions.Add(new Questions("Укол делают каждые полчаса. Сколько нужно минут для трёх уколов?", 60));
                 questions.Add(new Questions("Пять свечей горело. Две потухли. Сколько осталось свечей?", 2));
-                foreach (var i in questions)
-                {
-                    FileSystem.AppendToFile(file, $"{i.question};{i.answer}#");
-                }
+                var data = JsonConvert.SerializeObject(questions);
+                FileSystem.AppendToFile(file, data);
+                return questions;
             }
         }
 
         public static void RemoveData()
         {
             FileSystem.EraseData(file);
-            foreach (var i in questions)
-            {
-                FileSystem.AppendToFile(file, $"{i.question};{i.answer}#");
-            }
         }
 
         public static void SaveData(Questions questions)
         {
-            string text = $"{questions.question};{questions.answer}#";
+            string text = JsonConvert.SerializeObject(questions); 
             FileSystem.AppendToFile(file, text);
         }
 
