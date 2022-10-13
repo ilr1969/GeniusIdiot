@@ -7,13 +7,15 @@ namespace WindowsFormsApp
 {
     public partial class MainForm : Form
     {
-        private static List<Questions> questions;
+        private static List<Questions> questions = QuestionsStorage.GetAll();
+        private static List<User> userList = UserStorage.GetUsersResults();
         private static Questions currentQuestion;
         Results results = new Results();
         Auth auth = new Auth();
         private User user;
-        int countQuestions = 5;
+        private int countQuestions = 5;
         private int questionNum = 1;
+        private int randNumber;
 
         public MainForm()
         {
@@ -27,7 +29,6 @@ namespace WindowsFormsApp
             auth.ShowDialog();
 
             QuestionsStorage.GetAll();
-            questions = QuestionsStorage.questions;
             ShowNextQuestion();
 
             user = new User(auth.name, 0, "");
@@ -36,7 +37,7 @@ namespace WindowsFormsApp
         private void ShowNextQuestion()
         {
             Random random = new Random();
-            int randNumber = random.Next(0, questions.Count);
+            randNumber = random.Next(0, questions.Count);
             currentQuestion = questions[randNumber];
             QuestionNumber.Text = "Вопрос № " + questionNum;
             questionNum++;
@@ -47,7 +48,10 @@ namespace WindowsFormsApp
         {
             if (CheckErrors.GetUserAnswer(answer.Text, out int num, out string exMesage))
             {
-                user.AcceptRightAnswer();
+                if (Convert.ToInt32(answer.Text) == questions[randNumber].answer)
+                {
+                    user.AcceptRightAnswer();
+                }
             }
             else
             {
@@ -61,9 +65,9 @@ namespace WindowsFormsApp
             if (questions.Count == 0)
             {
                 var diagnose = Results.GetResults(user, countQuestions);
-                user = new User(auth.name, user.score, diagnose);
+                userList.Add(new User(auth.name, user.score, diagnose));
                 MessageBox.Show($"{auth.name}, ты - {diagnose}!");
-                UserStorage.SaveUserResults(user);
+                UserStorage.SaveUserResults(userList);
                 QuestionsStorage.RemoveData();
                 QuestionsStorage.GetAll();
                 return;

@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace GeniusIdiotClass
 {
     public class UserStorage
     {
-        public static string file = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/result.txt";
+        public static string file = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/result.json";
         
-        public static void SaveUserResults(User user)
+        public static void SaveUserResults(List<User> userList)
         {
-            string text = $"{user.name};{user.score};{ user.diagnose}#";
+            var text = JsonConvert.SerializeObject(userList);
+            FileSystem.EraseData(file);
             FileSystem.AppendToFile(file, text);
         }
 
         public static List<User> GetUsersResults()
         {
-            List<User> userList = new List<User>();
-            FileSystem.ReadResults(userList, file);
-            return userList;
+            return FileSystem.ReadResults(file);
         }
     }
 }

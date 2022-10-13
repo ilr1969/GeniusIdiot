@@ -8,10 +8,10 @@ namespace GeniusIdiotConsoleApp
     {
         public static void Main(string[] args)
         {
-            var userStorage = new List<User>();
+            var userList = UserStorage.GetUsersResults();
             int countQuestions = 5;
-            var questions = QuestionsStorage.questions;
-            QuestionsStorage.GetAll();
+            var questions = QuestionsStorage.GetAll();
+
 
             Console.WriteLine("Назови себя:");
             string name = Console.ReadLine();
@@ -50,11 +50,11 @@ namespace GeniusIdiotConsoleApp
 
                         user.diagnose = Results.GetResults(user, countQuestions);
                         Console.WriteLine($"{name}, ты - {user.diagnose}!");
-                        userStorage.Add(new User(user.name, user.score, user.diagnose));
+                        userList.Add(new User(user.name, user.score, user.diagnose));
 
-                        UserStorage.SaveUserResults(user);
+                        UserStorage.SaveUserResults(userList);
                         QuestionsStorage.RemoveData();
-                        QuestionsStorage.GetAll();
+                        questions = QuestionsStorage.GetAll();
 
                         Console.WriteLine("Желаете повторить тест? Введите Да или Нет");
                         bool userChoice = GetUserChoice();
