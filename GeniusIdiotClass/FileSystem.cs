@@ -33,7 +33,6 @@ namespace GeniusIdiotClass
             {
                 return new List<User>();
             }
-            
         }
 
         public static List<Questions> ReadData(string file)

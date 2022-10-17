@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using GeniusIdiotClass;
 
@@ -6,6 +7,8 @@ namespace WindowsFormsApp
 {
     public partial class DeleteQuestion : Form
     {
+        public static string file = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/data.json";
+        public static List<Questions> questionList = QuestionsStorage.GetAll();
         public DeleteQuestion()
         {
             InitializeComponent();
@@ -13,19 +16,33 @@ namespace WindowsFormsApp
 
         private void DeleteQuestion_Load(object sender, EventArgs e)
         {
-            int num = 1;
-            foreach (var i in QuestionsStorage.questions)
+/*            QuestionsStorage.GetAll();*/
+            ShowResults();
+        }
+
+        private void ShowResults()
+        {
+            int num = 0;
+            foreach (var i in questionList)
             {
-                questionsRichTextBox.AppendText(num + " " + i.question + "\n");
+                questionsDataGridView.Rows.Add();
+                questionsDataGridView.Rows[num].Cells[0].Value = i.question;
                 num++;
             }
         }
 
-        private void delButton_Click(object sender, EventArgs e)
+        private void delButton1_Click(object sender, EventArgs e)
         {
-            QuestionsStorage.questions.RemoveAt(Convert.ToInt32(numToDelTextBox.Text) - 1);
-            QuestionsStorage.RemoveData();
-            this.Close();
+            int rowIndex = questionsDataGridView.CurrentRow.Index;
+            questionList.RemoveAt(rowIndex);
+            QuestionsStorage.SaveData(questionList);
+            questionsDataGridView.Rows.RemoveAt(rowIndex);
+            questionsDataGridView.Refresh();
+
+            //QuestionsStorage.SaveData;
+
+            //ShowResults();
+            //this.Close();
         }
     }
 }
