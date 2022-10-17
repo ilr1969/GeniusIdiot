@@ -44,6 +44,7 @@ namespace WindowsFormsApp
             this.добавитьВопросToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.удалитьВопросToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.выходStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.показатьОтветыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -121,6 +122,7 @@ namespace WindowsFormsApp
             this.показатьРезультатыToolStripMenuItem1,
             this.добавитьВопросToolStripMenuItem,
             this.удалитьВопросToolStripMenuItem,
+            this.показатьОтветыToolStripMenuItem,
             this.выходStripMenuItem1});
             this.рыToolStripMenuItem.Name = "рыToolStripMenuItem";
             this.рыToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
@@ -161,6 +163,13 @@ namespace WindowsFormsApp
             this.выходStripMenuItem1.Text = "Выход";
             this.выходStripMenuItem1.Click += new System.EventHandler(this.выходStripMenuItem1_Click);
             // 
+            // показатьОтветыToolStripMenuItem
+            // 
+            this.показатьОтветыToolStripMenuItem.Name = "показатьОтветыToolStripMenuItem";
+            this.показатьОтветыToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.показатьОтветыToolStripMenuItem.Text = "Показать ответы";
+            this.показатьОтветыToolStripMenuItem.Click += new System.EventHandler(this.показатьОтветыToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -199,6 +208,7 @@ namespace WindowsFormsApp
         private System.Windows.Forms.ToolStripMenuItem добавитьВопросToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem удалитьВопросToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem выходStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem показатьОтветыToolStripMenuItem;
     }
 }
 

@@ -77,7 +77,8 @@ namespace GeniusIdiotConsoleApp
                     Console.WriteLine("Введите ответ:");
                     var answer = GetNumber();
                     QuestionsStorage.AddQuestion(question, answer);
-                    QuestionsStorage.SaveData(new Questions(question, answer));
+/*                    QuestionsStorage.RemoveData();
+                    QuestionsStorage.SaveData();*/
                 }
 
                  if (choice == 4)

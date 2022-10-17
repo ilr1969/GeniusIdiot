@@ -13,7 +13,8 @@ namespace GeniusIdiotClass
         {
             if (FileSystem.Exists(file))
             {
-                return FileSystem.ReadData(file);
+                questions = FileSystem.ReadData(file);
+                return questions;
             }
             else
             {
@@ -33,8 +34,9 @@ namespace GeniusIdiotClass
             FileSystem.EraseData(file);
         }
 
-        public static void SaveData(Questions questions)
+        public static void SaveData(List<Questions> questions)
         {
+            RemoveData();
             string text = JsonConvert.SerializeObject(questions); 
             FileSystem.AppendToFile(file, text);
         }
@@ -42,12 +44,13 @@ namespace GeniusIdiotClass
         public static void AddQuestion(string question, int answer)
         {
             questions.Add(new Questions(question, answer));
+            SaveData(questions);
         }
 
         public static void GetQuestions()
         {
             int num = 1;
-            foreach (var i in QuestionsStorage.questions)
+            foreach (var i in QuestionsStorage.GetAll())
             {
                 Console.WriteLine($"{num} {i.question}");
                 num++;

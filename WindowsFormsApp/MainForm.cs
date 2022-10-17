@@ -10,7 +10,6 @@ namespace WindowsFormsApp
         private static List<Questions> questions = QuestionsStorage.GetAll();
         private static List<User> userList = UserStorage.GetUsersResults();
         private static Questions currentQuestion;
-        Results results = new Results();
         Auth auth = new Auth();
         private User user;
         private int countQuestions = 5;
@@ -62,14 +61,14 @@ namespace WindowsFormsApp
             answer.Text = "";
             this.ActiveControl = answer;
             questions.Remove(currentQuestion);
-            if (questions.Count == 0)
+            if (questionNum - 1 == countQuestions)
             {
                 var diagnose = Results.GetResults(user, countQuestions);
                 userList.Add(new User(auth.name, user.score, diagnose));
                 MessageBox.Show($"{auth.name}, ты - {diagnose}!");
                 UserStorage.SaveUserResults(userList);
-                QuestionsStorage.RemoveData();
-                QuestionsStorage.GetAll();
+                questions = QuestionsStorage.GetAll();
+                user.score = 0;
                 return;
             }
             ShowNextQuestion();
@@ -83,30 +82,32 @@ namespace WindowsFormsApp
         private void показатьРезультатыToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             ShowResults showResult = new ShowResults();
-            showResult.Show();
-            showResult.BringToFront();
+            showResult.ShowDialog();
         }
 
         private void добавитьВопросToolStripMenuItem_Click(object sender, EventArgs e)
         {
             addQuestion addquestion = new addQuestion();
-            addquestion.Owner = this;
-            addquestion.Show();
-            addquestion.BringToFront();
+            addquestion.ShowDialog();
         }
 
         private void удалитьВопросToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DeleteQuestion delQuestion = new DeleteQuestion();
-            delQuestion.Owner = this;
-            delQuestion.Show();
-            delQuestion.BringToFront();
+            delQuestion.ShowDialog();
         }
 
         private void пройтиТестToolStripMenuItem_Click(object sender, EventArgs e)
         {
             questionNum = 1;
+            questions = QuestionsStorage.GetAll();
             ShowNextQuestion();
+        }
+
+        private void показатьОтветыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowAnswers showAnswers = new ShowAnswers();
+            showAnswers.ShowDialog();
         }
     }
 }

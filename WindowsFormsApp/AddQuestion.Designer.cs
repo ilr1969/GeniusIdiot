@@ -92,6 +92,7 @@ namespace WindowsFormsApp
             this.Name = "addQuestion";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Добавление вопроса";
+            this.Load += new System.EventHandler(this.addQuestion_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

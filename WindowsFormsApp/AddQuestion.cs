@@ -33,8 +33,14 @@ namespace WindowsFormsApp
                 return;
             }
             QuestionsStorage.AddQuestion(question, answer);
-            QuestionsStorage.SaveData(new Questions(question, answer));
+/*            QuestionsStorage.RemoveData();
+            QuestionsStorage.SaveData();*/
             this.Close();
+        }
+
+        private void addQuestion_Load(object sender, EventArgs e)
+        {
+            
         }
     }
 }

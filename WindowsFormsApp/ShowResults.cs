@@ -13,6 +13,7 @@ namespace WindowsFormsApp
 {
     public partial class ShowResults : Form
     {
+        public static List<User> results = UserStorage.GetUsersResults();
         public ShowResults()
         {
             InitializeComponent();
@@ -26,7 +27,7 @@ namespace WindowsFormsApp
         private void ShowResults_Load(object sender, EventArgs e)
         {
             int num = 0;
-            foreach (var i in UserStorage.GetUsersResults())
+            foreach (var i in results)
             {
                 showResultsDataGridView.Rows.Add();
                 showResultsDataGridView.Rows[num].Cells[0].Value = i.name;
