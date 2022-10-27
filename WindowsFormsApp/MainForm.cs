@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows.Forms;
 using GeniusIdiotClass;
 
@@ -15,6 +16,7 @@ namespace WindowsFormsApp
         private int countQuestions = 5;
         private int questionNum = 1;
         private int randNumber;
+        TimeSpan totalTime = new TimeSpan(0, 0, 0, 10);
 
         public MainForm()
         {
@@ -26,11 +28,8 @@ namespace WindowsFormsApp
         {
             auth.Owner = this;
             auth.ShowDialog();
-
-            QuestionsStorage.GetAll();
             ShowNextQuestion();
-
-            user = new User(auth.name, 0, "");
+            user = new User(auth.name, 0, "Неизвестный");
         }
 
         private void ShowNextQuestion()
@@ -41,6 +40,7 @@ namespace WindowsFormsApp
             QuestionNumber.Text = "Вопрос № " + questionNum;
             questionNum++;
             questionBox.Text = questions[randNumber].question;
+            totalTime = new TimeSpan(0, 0, 0, 10);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -69,7 +69,7 @@ namespace WindowsFormsApp
                 UserStorage.SaveUserResults(userList);
                 questions = QuestionsStorage.GetAll();
                 user.score = 0;
-                return;
+                timer.Stop();
             }
             ShowNextQuestion();
         }
@@ -101,6 +101,8 @@ namespace WindowsFormsApp
         {
             questionNum = 1;
             questions = QuestionsStorage.GetAll();
+            MessageBox.Show("На каждый ответ даётся 10 секунд, иначе ответ не будет засчитан!");
+            timer.Start();
             ShowNextQuestion();
         }
 
@@ -108,6 +110,27 @@ namespace WindowsFormsApp
         {
             ShowAnswers showAnswers = new ShowAnswers();
             showAnswers.ShowDialog();
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            totalTime = totalTime.Subtract(new TimeSpan(0, 0, 0, 1));
+            timerLabel.Text = $"Оставшееся время: {totalTime.ToString()}";
+            if (totalTime.Seconds == 0)
+            {
+                answer.Text = "0";
+                NextButton.PerformClick();
+            }
+        }
+
+        private void начатьТестToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("На каждый ответ даётся 10 секунд, иначе ответ не будет засчитан!");
+            totalTime = new TimeSpan(0, 0, 0, 10);
+            timerLabel.Text = $"Оставшееся время: {totalTime.ToString()}";
+            timer.Start();
+            timer.Interval = 1000;
+            ShowNextQuestion();
         }
     }
 }
