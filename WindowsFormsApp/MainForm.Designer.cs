@@ -43,8 +43,11 @@ namespace WindowsFormsApp
             this.показатьРезультатыToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.добавитьВопросToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.удалитьВопросToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.выходStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.показатьОтветыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.выходStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.timer = new System.Windows.Forms.Timer(this.components);
+            this.timerLabel = new System.Windows.Forms.Label();
+            this.начатьТестToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -108,7 +111,8 @@ namespace WindowsFormsApp
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.рыToolStripMenuItem});
+            this.рыToolStripMenuItem,
+            this.начатьТестToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(800, 24);
@@ -156,13 +160,6 @@ namespace WindowsFormsApp
             this.удалитьВопросToolStripMenuItem.Text = "Удалить вопрос";
             this.удалитьВопросToolStripMenuItem.Click += new System.EventHandler(this.удалитьВопросToolStripMenuItem_Click);
             // 
-            // выходStripMenuItem1
-            // 
-            this.выходStripMenuItem1.Name = "выходStripMenuItem1";
-            this.выходStripMenuItem1.Size = new System.Drawing.Size(189, 22);
-            this.выходStripMenuItem1.Text = "Выход";
-            this.выходStripMenuItem1.Click += new System.EventHandler(this.выходStripMenuItem1_Click);
-            // 
             // показатьОтветыToolStripMenuItem
             // 
             this.показатьОтветыToolStripMenuItem.Name = "показатьОтветыToolStripMenuItem";
@@ -170,11 +167,41 @@ namespace WindowsFormsApp
             this.показатьОтветыToolStripMenuItem.Text = "Показать ответы";
             this.показатьОтветыToolStripMenuItem.Click += new System.EventHandler(this.показатьОтветыToolStripMenuItem_Click);
             // 
+            // выходStripMenuItem1
+            // 
+            this.выходStripMenuItem1.Name = "выходStripMenuItem1";
+            this.выходStripMenuItem1.Size = new System.Drawing.Size(189, 22);
+            this.выходStripMenuItem1.Text = "Выход";
+            this.выходStripMenuItem1.Click += new System.EventHandler(this.выходStripMenuItem1_Click);
+            // 
+            // timer
+            // 
+            this.timer.Enabled = true;
+            this.timer.Interval = 1000;
+            this.timer.Tick += new System.EventHandler(this.timer_Tick);
+            // 
+            // timerLabel
+            // 
+            this.timerLabel.AutoSize = true;
+            this.timerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.timerLabel.Location = new System.Drawing.Point(319, 242);
+            this.timerLabel.Name = "timerLabel";
+            this.timerLabel.Size = new System.Drawing.Size(0, 37);
+            this.timerLabel.TabIndex = 10;
+            // 
+            // начатьТестToolStripMenuItem
+            // 
+            this.начатьТестToolStripMenuItem.Name = "начатьТестToolStripMenuItem";
+            this.начатьТестToolStripMenuItem.Size = new System.Drawing.Size(83, 20);
+            this.начатьТестToolStripMenuItem.Text = "Начать тест";
+            this.начатьТестToolStripMenuItem.Click += new System.EventHandler(this.начатьТестToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 329);
+            this.Controls.Add(this.timerLabel);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.questionBox);
             this.Controls.Add(this.label2);
@@ -209,6 +236,9 @@ namespace WindowsFormsApp
         private System.Windows.Forms.ToolStripMenuItem удалитьВопросToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem выходStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem показатьОтветыToolStripMenuItem;
+        private System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.Label timerLabel;
+        private System.Windows.Forms.ToolStripMenuItem начатьТестToolStripMenuItem;
     }
 }
 
